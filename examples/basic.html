@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <script src="http://localhost/Project/Vue2.x/dist/rollup/vue.js"></script> -->
+    <script src="http://localhost/Project/Vue2.x/dist/webpack/vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <hello></hello>
+    </div>
+
+    <script>
+      Vue.component("hello", {
+        template: "<div>hello</div>",
+        mounted() {
+          console.log(this);
+        },
+      });
+      const vm = new Vue({
+        el: "#app",
+        data: {},
+      });
+    </script>
+  </body>
+</html>
