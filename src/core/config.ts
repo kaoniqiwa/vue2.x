@@ -9,6 +9,7 @@ export interface Config {
 
   /** 平台相关配置 */
   isReservedTag: (x: string) => boolean | undefined;
+  mustUseProp: (tag: string, type?: string, name?: string) => boolean;
 }
 export default {
   optionMergeStrategies: Object.create(null),
@@ -16,4 +17,5 @@ export default {
   warnHandler: null,
 
   isReservedTag: no,
+  mustUseProp: no,
 } as unknown as Config;

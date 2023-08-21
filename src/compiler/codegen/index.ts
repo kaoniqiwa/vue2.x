@@ -1,5 +1,4 @@
 import { pluckModuleFunction } from "compiler/helpers";
-import { stat } from "fs";
 import {
   ASTAttr,
   ASTElement,
@@ -78,6 +77,9 @@ function genData(el: ASTElement, state: CodegenState): string {
   }
   /** '{staticClass:"foo",staticStyle:{"color":"red","font-size":"20px"},attrs:{"id":"app"}}'  */
   data = data.replace(/,$/, "") + "}";
+  if (el.dynamicAttrs) {
+    data = `_b(${data},"${el.tag}",${genProps(el.dynamicAttrs)})`;
+  }
   return data;
 }
 /**
@@ -90,17 +92,43 @@ function genProps(props: Array<ASTAttr>) {
   let dynamicProps = ``;
   for (let i = 0, l = props.length; i < l; i++) {
     const prop = props[i];
+    const value = transformSpecialNewlines(prop.value);
     if (prop.dynamic) {
+      dynamicProps += `${prop.name},${value},`;
     } else {
-      staticProps += `"${prop.name}":${prop.value},`;
+      staticProps += `"${prop.name}":${value},`;
     }
   }
   staticProps = `{${staticProps.replace(/,$/, "")}}`;
   if (dynamicProps) {
-    return dynamicProps;
+    return `_d(${staticProps},[${dynamicProps.slice(0, -1)}])`;
   } else {
     return staticProps;
   }
+}
+
+/**
+ * JavaScript 规定有5个字符，不能在字符串里面直接使用，只能使用转义形式
+ * U+005C：反斜杠（reverse solidus)
+ * U+000D：回车（carriage return）
+ * U+2028：行分隔符（line separator）
+ * U+2029：段分隔符（paragraph separator）
+ * U+000A：换行符（line feed）
+ *
+ * @example 以换行符为例
+ * let str = "a\nb"
+ * let str = "a\u000ab"
+ *
+ * JSON 格式的字符
+ * let data = '"a\nb"' 在 JSON.parse(data) 时会报错
+ * 同样 new Function(`console.log(${data})`) 也会报错
+ *
+ * 需要将换行符转义
+ * let data = '"a\\nb"'
+ *
+ */
+function transformSpecialNewlines(text: string) {
+  return text.replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029");
 }
 
 function genNode(node: ASTNode, state: CodegenState): string {
@@ -137,6 +165,7 @@ function genIfConditions(
     return genElement(el, state);
   }
 }
+
 /**
  * template:"hello" 为纯文本时，ast 为 undefined
  * @param ast

@@ -1,5 +1,5 @@
 import _Vue from "core/index";
-import { isReservedTag, query } from "../util";
+import { isReservedTag, mustUseProp, query } from "../util";
 import { inBrowser } from "core/util";
 import { mountComponent } from "core/instance/lifecycle";
 import { Component } from "src/types/component";
@@ -9,6 +9,7 @@ import { noop } from "src/shared/util";
 const Vue: typeof Component = _Vue as unknown as typeof Component;
 
 Vue.config.isReservedTag = isReservedTag;
+Vue.config.mustUseProp = mustUseProp;
 
 Vue.prototype.__patch__ = inBrowser ? patch : noop;
 

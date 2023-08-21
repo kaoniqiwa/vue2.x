@@ -9,16 +9,23 @@
   </head>
   <body>
     <div id="app">
+      <!-- 完整形式 -->
       <p v-bind:title="apple">I'm apple</p>
+
+      <!--简写形式 -->
+      <p :title="pear">I'm pear</p>
+
+      <!-- 动态属性名 -->
+      <p id="para" class="foo" v-bind:[attributename]="apple">I'm fruit</p>
     </div>
 
     <script>
       new Vue({
         el: "#app",
         data: {
-          apple: "apple",
-          pear: "pear",
-          attributename: "id",
+          apple: "Apple",
+          pear: "Pear",
+          attributename: "hello",
         },
       });
     </script>

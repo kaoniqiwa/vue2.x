@@ -20,6 +20,7 @@ import {
   pluckModuleFunction,
 } from "compiler/helpers";
 import { ObjectType } from "src/types/component";
+import { parseFilters } from "./filter-parser";
 
 const lineBreakRE = /[\r\n]/;
 const whitespaceRE = /[ \f\t\r\n]+/g;
@@ -33,6 +34,7 @@ export const dirRE = process.env.VBIND_PROP_SHORTHAND
 export const onRE = /^@|^v-on:/;
 /** v-bind 指令解析 */
 export const bindRE = /^:|^\.|^v-bind:/;
+const dynamicArgRE = /^\[.*\]$/;
 
 /**在文本节点中，解码 Html 字符实体  '&lt;' => '<' */
 const decodeHTMLCached = cached(he.decode);
@@ -154,6 +156,7 @@ function processAttrs(el: ASTElement) {
     let name = list[i].name;
     let rawName = name;
     let value = list[i].value;
+    let isDynamic = false;
     /** attrsList 中除了 DOM 属性，还有 Vue 指令 */
     if (dirRE.test(name)) {
       /** Vue 属性 */
@@ -163,7 +166,18 @@ function processAttrs(el: ASTElement) {
         /** v-bind 解析 */
         /** v-bind:title => title */
         name = name.replace(bindRE, "");
-        value = value;
+        /** 处理 value 中的过滤器 v-bind:title="apple | filter" */
+        value = parseFilters(value);
+        isDynamic = dynamicArgRE.test(name);
+
+        if (isDynamic) {
+          /**
+           * 动态属性名
+           * v-bind:[attributename]="apple"
+           * name 为 attributename 变量值
+           */
+          name = name.slice(1, -1);
+        }
         /**
          * v-bind 需要有值
          * <div v-bind:role></div>
@@ -173,7 +187,7 @@ function processAttrs(el: ASTElement) {
             `The value for a v-bind expression cannot be empty. Found in "v-bind:${name}"`
           );
         }
-        addAttr(el, name, value, list[i]);
+        addAttr(el, name, value, list[i], isDynamic);
       } else if (onRE.test(name)) {
         /** v-on 解析 */
       } else {

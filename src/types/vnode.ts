@@ -10,6 +10,7 @@ export interface VNodeData {
   style?: Array<Object> | Object;
   normalizedStyle?: Object;
   attrs?: { [key: string]: string };
+  domProps?: { [key: string]: any };
 
   hook?: { [key: string]: Function & { _merged: boolean } };
 }

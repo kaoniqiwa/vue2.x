@@ -85,6 +85,15 @@ export function addAttr(
   range?: Range,
   dynamic?: boolean
 ) {
+  /**
+   * el.dynamicAttrs = [
+   *  {
+   *    name:"attributename"
+   *    value:"apple",
+   *    dynamic:true
+   *  }
+   * ]
+   */
   const attrs = dynamic
     ? (el.dynamicAttrs = el.dynamicAttrs || [])
     : (el.attrs = el.attrs || []);

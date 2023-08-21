@@ -160,3 +160,5 @@ export function toObject(arr: Array<any>) {
   });
   return res;
 }
+/** Vue 属性 */
+export const isReservedAttribute = makeMap("key,ref,slot,slot-scope,is");
