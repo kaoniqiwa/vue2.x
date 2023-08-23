@@ -219,6 +219,22 @@ function mergeData(
 
   return to;
 }
+strats.computed = strats.methods = function (
+  parentVal: Object | undefined,
+  childVal: Object | undefined,
+  vm: Component | undefined,
+  key: string
+) {
+  if (childVal && __DEV__) {
+    assertObjectType(key, childVal, vm);
+  }
+  if (!parentVal) return childVal;
+  const ret = Object.create(null);
+  extend(ret, parentVal);
+  /** 由于是简单的对象合并，childVal 可能会覆盖 parentVal  */
+  if (childVal) extend(ret, childVal);
+  return ret;
+};
 
 function assertObjectType(name: PropertyKey, value: any, vm?: Component) {
   if (!isPlainObject(value)) {
@@ -230,6 +246,15 @@ function assertObjectType(name: PropertyKey, value: any, vm?: Component) {
   }
 }
 
+function checkComponents(options: ComponentOptions) {
+  for (const key in options.components) {
+    validateComponentName(key);
+  }
+}
+
+function normalizeProps(options: Record<string, any>, vm?: Component | null) {}
+function normalizeInject(options: Record<string, any>, vm?: Component | null) {}
+function normalizeDirectives(options: Record<string, any>) {}
 export function validateComponentName(name: string) {
   if (
     !new RegExp(`^[a-zA-Z][\\-\\.0-9_${unicodeRegExp.source}]*$`).test(name)
@@ -241,7 +266,11 @@ export function validateComponentName(name: string) {
         "should conform to valid custom element name in html5 specification."
     );
   }
-  if (isBuiltInTag(name) || isReservedTag(name)) {
+  /**
+   * 组件名称不能是 slot,component
+   * 组件名称不能是 html 标签，svg 标签
+   */
+  if (isBuiltInTag(name) || config.isReservedTag(name)) {
     warn(
       "Do not use built-in or reserved HTML elements as component " +
         "id: " +
@@ -254,10 +283,25 @@ export function mergeOptions(
   child: Record<string, any>,
   vm?: Component | null
 ) {
-  /** child 参数为 Vue 子类 */
+  /** 如果配置了组件，检查组件名是否合法 */
+  if (__DEV__) {
+    checkComponents(child);
+  }
+
+  /**
+   * child 参数为 Vue 子类
+   * 子类 options 会和父类 options 合并
+   *
+   */
   if (isFunction(child) && Reflect.has(child, "cid")) {
     child = (child as unknown as GlobalAPI).options;
   }
+
+  /** 各种形式的 props 规范化，统一处理 */
+  normalizeProps(child, vm);
+  normalizeInject(child, vm);
+  normalizeDirectives(child);
+
   let option: Record<string, any> = {};
 
   /**合并 parent 和 child 公有的 Key  */
@@ -266,7 +310,9 @@ export function mergeOptions(
   }
   for (let key in child) {
     /**合并 child 独有的key */
-    if (!hasOwn(parent, key)) mergeField(key);
+    if (!hasOwn(parent, key)) {
+      mergeField(key);
+    }
   }
   function mergeField(key: string) {
     /**不同的 Key,采用不同合并策略 */

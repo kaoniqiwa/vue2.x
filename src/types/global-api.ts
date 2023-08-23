@@ -1,3 +1,4 @@
+import { ToFunctionResult } from "./compiler";
 import { Component } from "./component";
 import { ComponentOptions } from "./options";
 
@@ -17,4 +18,5 @@ export interface GlobalAPI {
   ) => typeof Component | Function | void;
   directive: (id: string, def?: Function | Object) => void;
   filter: (id: string, def?: Function) => void;
+  compile: (template: string) => ToFunctionResult;
 }

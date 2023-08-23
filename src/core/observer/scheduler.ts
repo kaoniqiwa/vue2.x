@@ -3,11 +3,10 @@ import Watcher from "./watcher";
 
 const watcherSet = new Set();
 const queue: Array<Watcher> = [];
+let has: { [key: number]: boolean | null } = {};
 
 /**
  * 将不同 watcher 加入 queue 队列，设定一个微任务来遍历 queue，实现延迟批量处理更新功能
- * @param watcher
- * @returns
  */
 export function queueWatcher(watcher: Watcher) {
   const id = watcher.id;
@@ -15,8 +14,10 @@ export function queueWatcher(watcher: Watcher) {
     return;
   }
 
-  watcherSet.add(id);
-  queue.push(watcher);
+  if (has[id] != null) {
+    has[id] = true;
+    queue.push(watcher);
+  }
 
   nextTick(flushSchedulerQueue);
 }

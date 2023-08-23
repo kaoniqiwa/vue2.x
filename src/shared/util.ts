@@ -27,7 +27,7 @@ export function toString(val: any) {
     ? JSON.stringify(val, null, 2)
     : String(val);
 }
-export function isFunction(value: any): value is (...args: any[]) => any {
+export function isFunction(value: any): value is Function {
   return typeof value === "function";
 }
 
@@ -44,6 +44,7 @@ export function isPlainObject(o: any): o is ObjectType {
   );
 }
 
+/** Object.hasOwn(obj,key) */
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 export function hasOwn(obj: Object | Array<any>, key: PropertyKey): boolean {
   return hasOwnProperty.call(obj, key);

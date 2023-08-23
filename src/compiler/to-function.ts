@@ -1,8 +1,13 @@
 import { __DEV__, extend, noop } from "src/shared/util";
-import { CompiledResult, CompilerOptions } from "src/types/compiler";
+import {
+  CompiledResult,
+  CompilerOptions,
+  ToFunctionResult,
+} from "src/types/compiler";
 import { Component } from "src/types/component";
 import { warn as baseWarn } from "core/util";
 import { generateCodeFrame } from "./codeframe";
+import VNode from "core/vdom/vnode";
 
 export function createCompileToFunctionFn(
   compile: (template: string, options?: CompilerOptions) => CompiledResult
@@ -15,7 +20,7 @@ export function createCompileToFunctionFn(
     template: string,
     options?: CompilerOptions,
     vm?: Component
-  ) {
+  ): ToFunctionResult {
     options = extend({}, options);
     const warn = options.warn || baseWarn;
     Reflect.deleteProperty(options, "warn");
@@ -71,11 +76,12 @@ export function createCompileToFunctionFn(
     /** 在字符串函数体转真正的函数时收集报错信息 */
     const fnGenErrors: Array<{ err: Error; code: string }> = [];
 
-    const res: any = {};
-    res.render = createFunction(compiled.render, fnGenErrors);
-    res.staticRenderFns = compiled.staticRenderFns.map((code) => {
-      return createFunction(code, fnGenErrors);
-    });
+    const res: ToFunctionResult = {
+      render: createFunction(compiled.render, fnGenErrors),
+      staticRenderFns: compiled.staticRenderFns.map((code) => {
+        return createFunction(code, fnGenErrors);
+      }),
+    };
 
     if (__DEV__) {
       /**
@@ -94,7 +100,7 @@ export function createCompileToFunctionFn(
       }
     }
     // return res as ToFunctionResult;
-    return (cache[key] = res);
+    return (cache[key] = res) as ToFunctionResult;
   };
 }
 

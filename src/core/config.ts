@@ -10,6 +10,8 @@ export interface Config {
   /** 平台相关配置 */
   isReservedTag: (x: string) => boolean | undefined;
   mustUseProp: (tag: string, type?: string, name?: string) => boolean;
+
+  async: boolean;
 }
 export default {
   optionMergeStrategies: Object.create(null),
@@ -18,4 +20,6 @@ export default {
 
   isReservedTag: no,
   mustUseProp: no,
+
+  async: true,
 } as unknown as Config;

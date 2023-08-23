@@ -161,7 +161,7 @@ export function defineReactive(obj: Object, key: keyof typeof obj, val?: any) {
       } else {
         val = newVal;
       }
-      /** 设置新值是，需要重新劫持 */
+      /** 设置新值，需要重新劫持 */
       childOb = observe(newVal);
 
       dep.notify();

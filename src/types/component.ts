@@ -4,6 +4,7 @@ import { VNodeChildren, VNodeData } from "./vnode";
 import Watcher from "core/observer/watcher";
 import { Config } from "core/config";
 import { GlobalAPI } from "./global-api";
+import { ToFunctionResult } from "./compiler";
 
 export declare class Component {
   constructor(options?: ComponentOptions);
@@ -13,6 +14,7 @@ export declare class Component {
   static config: Config;
   static extend: GlobalAPI["extend"];
   static options: Record<string, any>;
+  static compile: (template: string) => ToFunctionResult;
 
   /**公有属性 */
   $options: ComponentOptions;
@@ -23,13 +25,23 @@ export declare class Component {
   /** 公有方法 */
   $mount: (el?: Element | string) => Component & { [key: string]: any };
   $nextTick: (fn: (...args: any[]) => any) => void | Promise<any>;
+  $watch: (
+    expOrFn: string | (() => any),
+    cb: Function,
+    options?: Record<string, any>
+  ) => Function;
 
   /** 私有属性 */
   _uid: number | string;
   _data: Record<string, any>;
   _isMounted: boolean;
-  _watcher: Watcher | undefined;
+  _self: Component;
+  _isVue: boolean;
+  /** 避免 vue 实例被观测 */
+  __v_skip: boolean;
+  _watcher: Watcher | null;
   _vnode?: VNode | null;
+  _computedWatchers: { [key: string]: Watcher };
 
   /** 私有方法 */
   _init: Function;
@@ -42,6 +54,7 @@ export declare class Component {
     children?: VNodeChildren
   ) => VNode;
   __patch__: (el: Element | VNode, vnode: VNode) => void;
+  [key: string]: any;
 }
 
 export interface FuncType<T = any> {

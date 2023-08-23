@@ -1,3 +1,4 @@
+import VNode from "core/vdom/vnode";
 import { ObjectType } from "./component";
 import { ComponentOptions } from "./options";
 
@@ -82,7 +83,7 @@ export type CompiledResult = {
 };
 
 export interface ToFunctionResult {
-  render: ComponentOptions["render"];
+  render: Function;
   staticRenderFns: Array<Function>;
 }
 

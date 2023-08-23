@@ -1,3 +1,6 @@
+import config from "core/config";
+import { __DEV__ } from "shared/util";
+
 export interface DepTarget {
   id: number;
   addDep(dep: Dep): void;
@@ -11,10 +14,10 @@ export default class Dep {
    * 为了能将 watcher实例 添加入监听列表,需要Dep 静态属性作为中转
    */
 
-  static target?: DepTarget;
+  static target?: DepTarget | null;
 
   id: number;
-  subs: Array<DepTarget>;
+  subs: Array<DepTarget | null>;
 
   constructor() {
     this.id = uid++;
@@ -36,16 +39,20 @@ export default class Dep {
    */
   depend() {
     if (Dep.target) {
+      /**双向绑定 */
       Dep.target.addDep(this);
     }
   }
 
-  /**
-   * 通知依赖更新
-   */
+  /**通知依赖更新*/
   notify() {
-    this.subs.forEach((sub) => sub.update());
+    const subs = this.subs.filter((s) => s) as DepTarget[];
+
+    if (__DEV__ && !config.async) {
+    }
+    subs.forEach((sub) => sub.update());
   }
+  /** 真正的收集依赖 */
   addSub(sub: DepTarget) {
     this.subs.push(sub);
     // console.log(
@@ -53,13 +60,21 @@ export default class Dep {
     //   this.subs
     // );
   }
+  /** 解除 sub 对属性的观察，以后属性的变化，不再触发 sub 的更新 */
+  removeSub(sub: DepTarget) {
+    this.subs[this.subs.indexOf(sub)] = null;
+  }
 }
 
-Dep.target = void 0;
+Dep.target = null;
+const targetStack: Array<DepTarget | null | undefined> = [];
 
 export function pushTarget(target?: DepTarget) {
+  // targetStack.push(target);
   Dep.target = target;
 }
 export function popTarget(target?: DepTarget) {
-  Dep.target = void 0;
+  // targetStack.pop();
+  // Dep.target = targetStack[targetStack.length - 1];
+  Dep.target = null;
 }

@@ -7,6 +7,7 @@ import { GlobalAPI } from "src/types/global-api";
 import { callHook, initLifecycle } from "./lifecycle";
 import { initEvents } from "./events";
 
+/** uid: vue 实例 唯一ID  */
 let uid = 0;
 
 export function initMixin(Vue: typeof Component) {
@@ -14,12 +15,23 @@ export function initMixin(Vue: typeof Component) {
     const vm = this;
     this._uid = uid++;
 
+    /** 在响应系统重，避免在 vue 实例上添加响应式数据*/
+    vm._isVue = true;
+
+    /** 在响应系统中，避免 vue 实例被观测 */
+    vm.__v_skip = true;
+
     if (options && options._isComponent) {
+      /** 创建自定义组件实例时，选项中有 _isComponent */
       initInternalComponent(vm, options as any);
     } else {
       /**
-       * 不能传参 Vue.options，
-       * 因为 _init()方法会被子组件调用，此时的实参应该是子组件构造函数.options
+       * 不能直接传参 Vue.options，
+       * 因为 vm 有可能是 Vue 的子类的实例
+       * const Sub = Vue.extend({});
+       * const s = new Sub()
+       *
+       * 我们需要获取构造函数上的 options ,并不是固定的 Vue.options
        */
       vm.$options = mergeOptions(
         resolveConstructorOptions(vm.constructor as unknown as GlobalAPI),
@@ -28,6 +40,7 @@ export function initMixin(Vue: typeof Component) {
       );
     }
 
+    vm._self = vm;
     initLifecycle(vm);
     initEvents(vm);
     initRender(vm);

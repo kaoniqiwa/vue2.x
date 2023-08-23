@@ -1,4 +1,4 @@
-import Watcher from "core/observer/watcher";
+import Watcher, { WatcherOptions } from "core/observer/watcher";
 import { warn } from "core/util";
 import { invokeWithErrorHandling } from "core/util/error";
 import { createEmptyVNode } from "core/vdom/create-empty";
@@ -38,12 +38,13 @@ export function lifecycleMixin(Vue: typeof Component) {
 }
 export function initLifecycle(vm: Component) {
   vm._isMounted = false;
+  vm._watcher = null;
 }
 
 export function mountComponent(vm: Component, el?: Element) {
   /**
-   * 真实 DOM 元素,可能为 undefined
-   * vm.$mount('') 且 options 初始化是未提供 el 属性
+   * vm.$el 初次挂载时指向将要被替换的 DOM 元素,
+   * 但是挂载完成后 vm.$el 将在 _update() 中被替换为组件的根元素
    *
    */
   vm.$el = el;
@@ -91,8 +92,22 @@ export function mountComponent(vm: Component, el?: Element) {
     vm._update(vm._render());
   };
 
-  /**渲染watcher,每个组件都有一个watcher,watcher内部会调用 updateComponent */
-  new Watcher(vm, updateComponent, noop, true);
+  const watcherOptions: WatcherOptions = {
+    /** 每次更新前调用 before() */
+    before() {
+      if (vm._isMounted && !vm._isDestroyed) {
+        callHook(vm, "beforeUpdate");
+      }
+    },
+  };
+
+  /**
+   * 渲染 watcher,每个组件都有一个渲染 watcher,watcher 内部会调用 updateComponent()
+   * updateComponent() 又会调用 vm._render(),
+   * vm._render()的执行将触发数据属性的 getter 拦截器，从将依赖者(watcher) 收集
+   * 当数据变化时，重新执行 updateComponent(),这就完成了重新渲染
+   */
+  new Watcher(vm, updateComponent, noop, watcherOptions, true);
 
   /**挂载完成后，vm.$el 更新为最新元素 */
   callHook(vm, "mounted");

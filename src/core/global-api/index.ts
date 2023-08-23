@@ -1,13 +1,15 @@
 import { GlobalAPI } from "src/types/global-api";
 import { initMixin } from "./mixin";
-import { nextTick, warn } from "core/util";
+import { mergeOptions, nextTick, warn } from "core/util";
 import { ASSET_TYPES } from "src/shared/constants";
 import { initAssetRegisters } from "./assets";
 import { initUse } from "./use";
 import { initExtend } from "./extend";
 import config from "core/config";
-import { __DEV__ } from "shared/util";
+import { __DEV__, extend } from "shared/util";
 import { Component } from "src/types/component";
+import { defineReactive } from "core/observer";
+import builtInComponents from "../components/index";
 
 export function initGlobalAPI(Vue: GlobalAPI) {
   const configDef: Record<string, any> = {};
@@ -19,9 +21,14 @@ export function initGlobalAPI(Vue: GlobalAPI) {
       );
     };
   }
+  /**Vue 全局配置 */
   Object.defineProperty(Vue, "config", configDef);
+
   Vue.util = {
-    nextTick,
+    warn,
+    extend,
+    mergeOptions,
+    defineReactive,
   };
   Vue.options = Object.create(null);
 
@@ -39,6 +46,8 @@ export function initGlobalAPI(Vue: GlobalAPI) {
   Vue.options._base = Vue as unknown as typeof Component;
 
   Vue.nextTick = nextTick;
+
+  extend(Vue.options.components!, builtInComponents);
 
   initUse(Vue);
   initMixin(Vue);

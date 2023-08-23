@@ -7,6 +7,7 @@ import { ComponentOptions } from "src/types/options";
 export function initExtend(Vue: GlobalAPI) {
   Vue.cid = 0;
   /**
+   * cid:constructor id
    * 组件复用时，区分组件
    * <hello></hello>
    * <hello></hello>

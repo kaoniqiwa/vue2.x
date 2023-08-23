@@ -46,3 +46,16 @@ export interface SimpleSet {
   add(key: string | number): any;
   clear(): void;
 }
+
+let _isServer: boolean;
+export const isServerRendering = () => {
+  if (_isServer === undefined) {
+    if (!inBrowser && typeof global !== "undefined") {
+      _isServer =
+        global["process"] && global["process"].env.VUE_ENV === "server";
+    } else {
+      _isServer = false;
+    }
+  }
+  return _isServer;
+};

@@ -1,5 +1,5 @@
 import VNode from "core/vdom/vnode";
-import { Component } from "./component";
+import { Component, FuncType } from "./component";
 
 export type ComponentOptions = {
   [key: string]: any;
@@ -14,10 +14,10 @@ export type ComponentOptions = {
   methods?: { [key: string]: Function };
   computed?: {
     [key: string]:
-      | Function
+      | FuncType
       | {
-          get?: Function;
-          set?: Function;
+          get?: FuncType;
+          set?: FuncType;
           cache?: boolean;
         };
   };
