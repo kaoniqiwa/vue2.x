@@ -48,11 +48,7 @@ export function renderMixin(Vue: typeof Component) {
     return vnode;
   };
 
-  /**
-   * nextTick 中 上下文 context 不能定死为 vue 实例，
-   * 所以不直接 Vue.prototype.$nextTick = nextTick
-   */
-  Vue.prototype.$nextTick = function (fn: (...args: any[]) => any) {
+  Vue.prototype.$nextTick = function (fn?: (...args: any[]) => any) {
     return nextTick(fn, this);
   };
 }

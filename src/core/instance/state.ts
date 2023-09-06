@@ -66,6 +66,7 @@ export function stateMixin(Vue: typeof Component) {
   };
 }
 export function initState(vm: Component) {
+  vm._watchers = [];
   const opts = vm.$options;
 
   if (opts.props) {

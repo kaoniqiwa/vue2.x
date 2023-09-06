@@ -15,7 +15,7 @@ export interface WatcherOptions {
 }
 
 export default class Watcher implements DepTarget {
-  vm?: Component;
+  vm: Component;
   /**uid号 */
   id: number;
   /**原始表达式,方便观察 watcher 的来源 */
@@ -50,7 +50,7 @@ export default class Watcher implements DepTarget {
   value: any;
 
   constructor(
-    vm: Component | undefined,
+    vm: Component,
     expOrFn: string | (() => any),
     cb: Function,
     options?: WatcherOptions | null,
@@ -62,6 +62,8 @@ export default class Watcher implements DepTarget {
       /**渲染函数的 watcher  */
       vm._watcher = this;
     }
+    vm._watchers.push(this);
+
     if (options) {
       this.lazy = !!options.lazy;
       this.deep = !!options.deep;

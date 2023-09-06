@@ -8,7 +8,7 @@
     <script src="http://localhost/Project/Vue2.x/dist/webpack/vue.js"></script>
   </head>
   <body>
-    <div id="app">{{ fullName()}}</div>
+    <div id="app"></div>
 
     <script>
       const vm = new Vue({
@@ -17,10 +17,10 @@
           firstName: "Jim",
           lastName: "Green",
         },
-        methods: {
-          fullName() {
-            return this.firstName + this.lastName;
-          },
+        created() {
+          this.$nextTick().then((res) => {
+            console.log("sds", res);
+          });
         },
       });
     </script>

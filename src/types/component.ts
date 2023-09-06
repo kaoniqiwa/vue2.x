@@ -42,6 +42,7 @@ export declare class Component {
   _watcher: Watcher | null;
   _vnode?: VNode | null;
   _computedWatchers: { [key: string]: Watcher };
+  _watchers: Watcher[];
 
   /** 私有方法 */
   _init: Function;
@@ -54,6 +55,7 @@ export declare class Component {
     children?: VNodeChildren
   ) => VNode;
   __patch__: (el: Element | VNode, vnode: VNode) => void;
+
   [key: string]: any;
 }
 
