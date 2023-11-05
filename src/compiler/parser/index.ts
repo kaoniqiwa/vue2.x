@@ -1,4 +1,4 @@
-import he from "he";
+import he from 'he';
 
 import {
   ASTAttr,
@@ -7,10 +7,10 @@ import {
   ASTNode,
   CompilerOptions,
   ModuleOptions,
-} from "src/types/compiler";
-import { parseHTML } from "./html-parser";
-import { parseText } from "./text-parser";
-import { __DEV__, cached } from "src/shared/util";
+} from 'src/types/compiler';
+import { parseHTML } from './html-parser';
+import { parseText } from './text-parser';
+import { __DEV__, cached } from 'src/shared/util';
 import {
   addAttr,
   baseWarn,
@@ -18,9 +18,9 @@ import {
   getBindingAttr,
   getRawBindingAttr,
   pluckModuleFunction,
-} from "compiler/helpers";
-import { ObjectType } from "src/types/component";
-import { parseFilters } from "./filter-parser";
+} from 'compiler/helpers';
+import { ObjectType } from 'src/types/component';
+import { parseFilters } from './filter-parser';
 
 const lineBreakRE = /[\r\n]/;
 const whitespaceRE = /[ \f\t\r\n]+/g;
@@ -39,12 +39,12 @@ const dynamicArgRE = /^\[.*\]$/;
 /**在文本节点中，解码 Html 字符实体  '&lt;' => '<' */
 const decodeHTMLCached = cached(he.decode);
 
-let transforms: Array<Required<ModuleOptions>["transformNode"]> = [];
+let transforms: Array<Required<ModuleOptions>['transformNode']> = [];
 let warn: Function;
 let delimiters: [string, string] | undefined;
 
 function isTextTag(el: ASTElement): boolean {
-  return el.tag === "script" || el.tag === "style";
+  return el.tag === 'script' || el.tag === 'style';
 }
 
 function createASTElement(
@@ -58,7 +58,7 @@ function createASTElement(
    * rawAttrsMap:{'id':{name:'id',value:'"app"',start:,end:,dynamic:}}
    */
   let element: ASTElement = {
-    type: Node["ELEMENT_NODE"],
+    type: Node['ELEMENT_NODE'],
     tag: tag,
     attrsList: attrs,
     attrsMap: makeAttrsMap(attrs),
@@ -101,7 +101,7 @@ function makeAttrsMap(attrs: Array<ASTAttr>) {
        * 已经有 class="foo" 则抛弃class="bar"
        *
        */
-      warn("duplicate attribute: " + attr.name, attr);
+      warn('duplicate attribute: ' + attr.name, attr);
     }
     map[attr.name] = attr.value;
   });
@@ -135,13 +135,13 @@ function processElement(el: ASTElement, options: CompilerOptions) {
   return el;
 }
 function processKey(el: ASTElement) {
-  const exp = getBindingAttr(el, "key");
+  const exp = getBindingAttr(el, 'key');
   if (exp) {
     if (__DEV__) {
-      if (el.tag === "template") {
+      if (el.tag === 'template') {
         warn(
           `<template> cannot be keyed. Place the key on real elements instead.`,
-          getRawBindingAttr(el, "key")
+          getRawBindingAttr(el, 'key')
         );
       }
       if (el.for) {
@@ -154,7 +154,7 @@ function processAttrs(el: ASTElement) {
   const list = el.attrsList;
   for (let i = 0, l = list.length; i < l; i++) {
     let name = list[i].name;
-    let rawName = name;
+    // let rawName = name;
     let value = list[i].value;
     let isDynamic = false;
     /** attrsList 中除了 DOM 属性，还有 Vue 指令 */
@@ -165,7 +165,7 @@ function processAttrs(el: ASTElement) {
       if (bindRE.test(name)) {
         /** v-bind 解析 */
         /** v-bind:title => title */
-        name = name.replace(bindRE, "");
+        name = name.replace(bindRE, '');
         /** 处理 value 中的过滤器 v-bind:title="apple | filter" */
         value = parseFilters(value);
         isDynamic = dynamicArgRE.test(name);
@@ -200,8 +200,8 @@ function processAttrs(el: ASTElement) {
         if (res) {
           warn(
             `${name}="${value}": ` +
-              "Interpolation inside attributes has been removed. " +
-              "Use v-bind or the colon shorthand instead. For example, " +
+              'Interpolation inside attributes has been removed. ' +
+              'Use v-bind or the colon shorthand instead. For example, ' +
               'instead of <div id="{{ val }}">, use <div :id="val">.',
             list[i]
           );
@@ -217,7 +217,7 @@ function processFor(el: ASTElement) {}
  *  删除 v-if,v-else,v-else-if,因为真实 DOM 没有这些东西
  */
 function processIf(el: ASTElement) {
-  const exp = getAndRemoveAttr(el, "v-if");
+  const exp = getAndRemoveAttr(el, 'v-if');
   if (exp) {
     el.if = exp;
     addIfCondition(el, {
@@ -225,7 +225,7 @@ function processIf(el: ASTElement) {
       block: el,
     });
   } else {
-    if (getAndRemoveAttr(el, "v-else") !== null) {
+    if (getAndRemoveAttr(el, 'v-else') !== null) {
       el.else = true;
     }
   }
@@ -282,7 +282,7 @@ export function parse(template: string, options: CompilerOptions) {
    * 获取 transformNode 函数，结果已经剔除了 undefined，所以 transforms 类型用 Required<T> 处理
    *
    */
-  transforms = pluckModuleFunction(options.modules, "transformNode");
+  transforms = pluckModuleFunction(options.modules, 'transformNode');
 
   /**每次解析模版时，都需要生成新的树 */
   let root: ASTElement | undefined = void 0;
@@ -294,7 +294,7 @@ export function parse(template: string, options: CompilerOptions) {
   const preserveWhitespace = options.preserveWhitespace !== false;
 
   let inVPre = false;
-  let inPre = false;
+  // let inPre = false;
   let warned = false;
   function warnOnce(msg: string) {
     if (!warned) {
@@ -347,8 +347,8 @@ export function parse(template: string, options: CompilerOptions) {
 
     while (
       (lastNode = element.children[element.children.length - 1]) &&
-      lastNode.type == Node["TEXT_NODE"] &&
-      lastNode.text == " "
+      lastNode.type == Node['TEXT_NODE'] &&
+      lastNode.text == ' '
     ) {
       element.children.pop();
     }
@@ -434,7 +434,7 @@ export function parse(template: string, options: CompilerOptions) {
         if (__DEV__) {
           if (text == template) {
             warnOnce(
-              "Component template requires a root element, rather than just text."
+              'Component template requires a root element, rather than just text.'
             );
           } else if ((text = text.trim())) {
             warnOnce(`text "${text}" outside root element will be ignored.`);
@@ -457,13 +457,13 @@ export function parse(template: string, options: CompilerOptions) {
             : (decodeHTMLCached(text) as string);
         } else if (!children.length) {
           /** text 是空白字符，且 text 是原始 html中 currentParent 唯一子节点,不需要显示内容 */
-          text = "";
+          text = '';
         } else if (whitespaceOption) {
-          if (whitespaceOption == "condense") {
+          if (whitespaceOption == 'condense') {
             /**如果有换行，则返回 "",如果没有，则返回 " " */
-            text = lineBreakRE.test(text) ? "" : " ";
+            text = lineBreakRE.test(text) ? '' : ' ';
           } else {
-            text = " ";
+            text = ' ';
           }
         } else {
           /**
@@ -471,10 +471,10 @@ export function parse(template: string, options: CompilerOptions) {
            * 是否至少保留一个空格
            *
            */
-          text = preserveWhitespace ? " " : "";
+          text = preserveWhitespace ? ' ' : '';
         }
         if (text) {
-          if (whitespaceOption == "condense") {
+          if (whitespaceOption == 'condense') {
             /**
              * <div>hello \t \r\n \f world </div>
              * 压缩为
@@ -482,12 +482,12 @@ export function parse(template: string, options: CompilerOptions) {
              *
              * 虽然浏览器在渲染时，结果是一样的
              */
-            text = text.replace(whitespaceRE, "");
+            text = text.replace(whitespaceRE, '');
           }
           let child: ASTNode | undefined = void 0;
           let res;
 
-          if (text != " " && (res = parseText(text, delimiters))) {
+          if (text != ' ' && (res = parseText(text, delimiters))) {
             child = {
               type: Node.ATTRIBUTE_NODE,
               expression: res.expression,
@@ -497,7 +497,7 @@ export function parse(template: string, options: CompilerOptions) {
           } else {
             /** text 是纯文本 */
             child = {
-              type: Node["TEXT_NODE"],
+              type: Node['TEXT_NODE'],
               text,
             };
           }

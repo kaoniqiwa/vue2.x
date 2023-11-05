@@ -1,8 +1,8 @@
-import { Component } from "src/types/component";
-import Dep, { DepTarget, popTarget, pushTarget } from "./dep";
-import { __DEV__, isFunction, noop } from "src/shared/util";
-import { SimpleSet, _Set as Set, parsePath, warn } from "core/util/";
-import { queueWatcher } from "./scheduler";
+import { Component } from 'src/types/component';
+import Dep, { DepTarget, popTarget, pushTarget } from './dep';
+import { __DEV__, isFunction, noop } from 'src/shared/util';
+import { SimpleSet, _Set as Set, parsePath, warn } from 'core/util/';
+import { queueWatcher } from './scheduler';
 
 let uid = 0;
 
@@ -88,7 +88,7 @@ export default class Watcher implements DepTarget {
     this.newDeps = [];
     this.newDepIds = new Set();
 
-    this.expression = __DEV__ ? expOrFn.toString() : "";
+    this.expression = __DEV__ ? expOrFn.toString() : '';
     if (isFunction(expOrFn)) {
       this.getter = expOrFn;
     } else {
@@ -96,11 +96,11 @@ export default class Watcher implements DepTarget {
       if (!this.getter) {
         /**  expOrFn 字符串时非法字符*/
         this.getter = noop;
-        process.env.NODE_ENV !== "production" &&
+        process.env.NODE_ENV !== 'production' &&
           warn(
             `Failed watching path: "${expOrFn}" ` +
-              "Watcher only accepts simple dot-delimited paths. " +
-              "For full control, use a function instead.",
+              'Watcher only accepts simple dot-delimited paths. ' +
+              'For full control, use a function instead.',
             vm
           );
       }
@@ -172,7 +172,8 @@ export default class Watcher implements DepTarget {
 
   run() {
     if (this.active) {
-      const value = this.get();
+      // const value = this.get();
+      // console.log(value);
     }
   }
   evaluate() {

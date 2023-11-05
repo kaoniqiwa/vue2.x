@@ -1,9 +1,7 @@
-import VNode from "core/vdom/vnode";
-import { type } from "os";
-import { cached, extend, isArray, toObject } from "shared/util";
-import { ObjectType } from "src/types/component";
-import { VNodeData, VNodeWithData } from "src/types/vnode";
-import { isatty } from "tty";
+import VNode from 'core/vdom/vnode';
+import { cached, extend, isArray, toObject } from 'shared/util';
+import { ObjectType } from 'src/types/component';
+import { VNodeData } from 'src/types/vnode';
 
 /**
  * @example

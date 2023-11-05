@@ -1,5 +1,5 @@
-import config from "core/config";
-import { __DEV__ } from "shared/util";
+import config from 'core/config';
+import { __DEV__ } from 'shared/util';
 
 export interface DepTarget {
   id: number;
@@ -67,7 +67,7 @@ export default class Dep {
 }
 
 Dep.target = null;
-const targetStack: Array<DepTarget | null | undefined> = [];
+// const targetStack: Array<DepTarget | null | undefined> = [];
 
 export function pushTarget(target?: DepTarget) {
   // targetStack.push(target);

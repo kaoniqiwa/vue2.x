@@ -1,6 +1,4 @@
-import VNode from "core/vdom/vnode";
-import { ObjectType } from "./component";
-import { ComponentOptions } from "./options";
+import { ObjectType } from './component';
 
 export type ModuleOptions = {
   /**
@@ -33,7 +31,7 @@ export type CompilerOptions = {
 
   /**是否需要在标签之间插入一个空格 */
   preserveWhitespace?: boolean;
-  whitespace?: "preserve" | "condense";
+  whitespace?: 'preserve' | 'condense';
 
   /**web 平台独有的配置,其他平台默认 false */
   /**是否需要补全html标签 <p><h1></h1></p> ==> <p></p><h1></h1><p></p> */
@@ -118,7 +116,7 @@ export interface StackElement {
 }
 
 export type ASTElement = {
-  type: Node["ELEMENT_NODE"];
+  type: Node['ELEMENT_NODE'];
   tag: string;
   attrsList: Array<ASTAttr>;
   children: Array<ASTNode>;
@@ -151,13 +149,13 @@ export type ASTElement = {
   key?: string;
 };
 export type ASTExpression = {
-  type: Node["ATTRIBUTE_NODE"];
+  type: Node['ATTRIBUTE_NODE'];
   expression: string;
   tokens: Array<string | Object>;
   text: string;
 };
 export type ASTText = {
-  type: Node["TEXT_NODE"];
+  type: Node['TEXT_NODE'];
   text: string;
   isComment?: boolean;
 };

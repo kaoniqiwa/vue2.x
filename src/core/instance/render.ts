@@ -1,11 +1,11 @@
-import VNode from "core/vdom/vnode";
-import { Component } from "src/types/component";
-import { installRenderHelpers } from "./render-helpers";
-import { VNodeChildren, VNodeData } from "src/types/vnode";
-import { createElement } from "core/vdom/create-element";
-import { createEmptyVNode } from "core/vdom/create-empty";
-import { __DEV__, isArray } from "src/shared/util";
-import { nextTick, warn } from "core/util";
+import VNode from 'core/vdom/vnode';
+import { Component } from 'src/types/component';
+import { installRenderHelpers } from './render-helpers';
+import { VNodeChildren, VNodeData } from 'src/types/vnode';
+import { createElement } from 'core/vdom/create-element';
+import { createEmptyVNode } from 'core/vdom/create-empty';
+import { __DEV__, isArray } from 'src/shared/util';
+import { nextTick, warn } from 'core/util';
 
 export function renderMixin(Vue: typeof Component) {
   installRenderHelpers(Vue.prototype);
@@ -27,8 +27,8 @@ export function renderMixin(Vue: typeof Component) {
     if (!(vnode instanceof VNode)) {
       if (__DEV__ && isArray(vnode)) {
         warn(
-          "Multiple root nodes returned from render function. Render function " +
-            "should return a single root node.",
+          'Multiple root nodes returned from render function. Render function ' +
+            'should return a single root node.',
           vm
         );
       }
@@ -55,8 +55,8 @@ export function renderMixin(Vue: typeof Component) {
 
 export function initRender(vm: Component) {
   vm._vnode = null;
-  const options = vm.$options;
-  const parentVnode = (vm.$vnode = options._parentVnode);
+  // const options = vm.$options;
+  // const parentVnode = (vm.$vnode = options._parentVnode);
 
   vm._c = (tag?: string, data?: VNodeData, children?: VNodeChildren) =>
     createElement(vm, tag, data, children);

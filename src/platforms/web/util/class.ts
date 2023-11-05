@@ -1,7 +1,6 @@
-import VNode from "core/vdom/vnode";
-import { isArray, isDef, isObject } from "shared/util";
-import { ObjectType } from "src/types/component";
-import { VNodeWithData } from "src/types/vnode";
+import VNode from 'core/vdom/vnode';
+import { isArray, isDef, isObject } from 'shared/util';
+import { ObjectType } from 'src/types/component';
 
 export function genClassForVnode(vnode: VNode) {
   const data = vnode.data || {};
@@ -21,7 +20,7 @@ function concat(a?: string, b?: string) {
   /**
    * 类名之间用空格分隔 "foo bar base"
    */
-  return a ? (b ? a + " " + b : a) : b || "";
+  return a ? (b ? a + ' ' + b : a) : b || '';
 }
 function stringifyClass(value?: Array<any> | string | ObjectType) {
   if (isArray(value)) {
@@ -33,36 +32,36 @@ function stringifyClass(value?: Array<any> | string | ObjectType) {
   /**
    * v-bind:class="'foo bar'"
    */
-  if (typeof value === "string") {
+  if (typeof value === 'string') {
     return value;
   }
-  return "";
+  return '';
 }
 /**
  * v-bind:class="['bar',['base',['hello']]]" => class="bar base hello"
  * v-bind:class="[{ bar: true, foo: false }, "base", { hello: 1 + 1 }]" => class="bar base hello"
  */
 function stringifyArray(value: Array<any>) {
-  let res = "";
+  let res = '';
   for (let i = 0, l = value.length; i < l; i++) {
     let stringified = stringifyClass(value[i]);
-    if (isDef(stringified) && stringified !== "") {
-      res += stringified + " ";
+    if (isDef(stringified) && stringified !== '') {
+      res += stringified + ' ';
     }
   }
-  res = res.replace(/\s$/, "");
+  res = res.replace(/\s$/, '');
   return res;
 }
 /**
  * v-bind:class="{foo:true,bar:false}" => class="foo"
  */
 function stringifyObject(value: ObjectType) {
-  let res = "";
+  let res = '';
   Object.keys(value).forEach((key) => {
     if (value[key]) {
-      res += key + " ";
+      res += key + ' ';
     }
   });
-  res = res.replace(/\s$/, "");
+  res = res.replace(/\s$/, '');
   return res;
 }

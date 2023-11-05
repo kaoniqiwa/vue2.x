@@ -1,6 +1,6 @@
-import VNode from "core/vdom/vnode";
-import { isUndef } from "shared/util";
-import { PatchModuleOptions, VNodeWithData } from "src/types/vnode";
+import VNode from 'core/vdom/vnode';
+import { isUndef } from 'shared/util';
+import { PatchModuleOptions } from 'src/types/vnode';
 import {
   convertEnumeratedValue,
   getXlinkProp,
@@ -9,10 +9,10 @@ import {
   isFalsyAttrValue,
   isXlink,
   xlinkNS,
-} from "web/util/attrs";
+} from 'web/util/attrs';
 
 function setAttr(el: Element, key: string, value: any) {
-  if (el.tagName.indexOf("-") > -1) {
+  if (el.tagName.indexOf('-') > -1) {
   } else if (isBooleanAttr(key)) {
     if (isFalsyAttrValue(value)) {
       el.removeAttribute(key);
@@ -24,7 +24,7 @@ function setAttr(el: Element, key: string, value: any) {
        */
 
       value =
-        key === "allowfullscreen" && el.tagName === "EMBED" ? "true" : key;
+        key === 'allowfullscreen' && el.tagName === 'EMBED' ? 'true' : key;
       el.setAttribute(key, value);
     }
   } else if (isEnumeratedAttr(key)) {

@@ -1,24 +1,24 @@
-import VNode from "core/vdom/vnode";
+import VNode from 'core/vdom/vnode';
 
-import { cached, camelize, hyphenate, isArray, isUndef } from "shared/util";
-import { ObjectType } from "src/types/component";
-import { PatchModuleOptions, VNodeWithData } from "src/types/vnode";
-import { getStyle, normalizeStyleBinding } from "web/util/style";
+import { cached, camelize, hyphenate, isArray, isUndef } from 'shared/util';
+import { ObjectType } from 'src/types/component';
+import { PatchModuleOptions } from 'src/types/vnode';
+import { getStyle, normalizeStyleBinding } from 'web/util/style';
 
 const cssVarRE = /^--/;
 const importantRE = /\s*!important$/;
 
-const vendorNames = ["Webkit", "Moz", "ms"];
+const vendorNames = ['Webkit', 'Moz', 'ms'];
 let emptyStyle: CSSStyleDeclaration;
 /**
  * 检查 css 属性名的有效性
  * name='font-size' 转成 'fontSize' 之后在 CSSStyleDeclaration 查找是否有 'fontSize'
  */
 const normalize = cached(function (prop: string) {
-  emptyStyle = emptyStyle || document.createElement("div").style;
+  emptyStyle = emptyStyle || document.createElement('div').style;
 
   prop = camelize(prop);
-  if (prop != "filter" && prop in emptyStyle) {
+  if (prop != 'filter' && prop in emptyStyle) {
     return prop;
   }
   /**
@@ -52,8 +52,8 @@ function setProp(el: HTMLElement, name: string, value: any) {
      */
     el.style.setProperty(
       hyphenate(name),
-      value.replace(importantRE, ""),
-      "important"
+      value.replace(importantRE, ''),
+      'important'
     );
   } else {
     const normalizedName = normalize(name);
@@ -113,7 +113,7 @@ function updateStyle(oldVnode: VNode, vnode: VNode) {
    */
   for (let name in oldStyle) {
     if (isUndef(newStyle[name])) {
-      setProp(el, name, "");
+      setProp(el, name, '');
     }
   }
   /**
@@ -125,7 +125,7 @@ function updateStyle(oldVnode: VNode, vnode: VNode) {
   for (let name in newStyle) {
     cur = newStyle[name];
     if (cur != oldStyle[name]) {
-      setProp(el, name, cur == null ? "" : cur);
+      setProp(el, name, cur == null ? '' : cur);
     }
   }
 }

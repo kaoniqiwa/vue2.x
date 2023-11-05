@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="http://localhost/Project/Vue2.x/dist/rollup/vue.js"></script>
+    <style></style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script>
+      Vue.component('hello', {
+        props: ['age'],
+        template: `
+            <div>ppp</div>
+        `,
+      });
+
+      new Vue({
+        el: '#app',
+        template: `
+            <div>
+                <p>app</p>
+                <hello/>
+            </div>
+        `,
+      });
+    </script>
+  </body>
+</html>

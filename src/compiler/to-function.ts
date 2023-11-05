@@ -1,13 +1,12 @@
-import { __DEV__, extend, noop } from "src/shared/util";
+import { __DEV__, extend, noop } from 'src/shared/util';
 import {
   CompiledResult,
   CompilerOptions,
   ToFunctionResult,
-} from "src/types/compiler";
-import { Component } from "src/types/component";
-import { warn as baseWarn } from "core/util";
-import { generateCodeFrame } from "./codeframe";
-import VNode from "core/vdom/vnode";
+} from 'src/types/compiler';
+import { Component } from 'src/types/component';
+import { warn as baseWarn } from 'core/util';
+import { generateCodeFrame } from './codeframe';
 
 export function createCompileToFunctionFn(
   compile: (template: string, options?: CompilerOptions) => CompiledResult
@@ -23,20 +22,20 @@ export function createCompileToFunctionFn(
   ): ToFunctionResult {
     options = extend({}, options);
     const warn = options.warn || baseWarn;
-    Reflect.deleteProperty(options, "warn");
+    Reflect.deleteProperty(options, 'warn');
 
     /** 检查内容安全策略,看看 new Function()能不能使用，因为在渲染函数执行时，需要使用到 new Function */
     if (__DEV__) {
       try {
-        new Function("return 1");
+        new Function('return 1');
       } catch (e: any) {
         if (e.toString().match(/unsafe-eval|CSP/)) {
           warn(
-            "It seems you are using the standalone build of Vue.js in an " +
-              "environment with Content Security Policy that prohibits unsafe-eval. " +
-              "The template compiler cannot work in this environment. Consider " +
-              "relaxing the policy to allow unsafe-eval or pre-compiling your " +
-              "templates into render functions."
+            'It seems you are using the standalone build of Vue.js in an ' +
+              'environment with Content Security Policy that prohibits unsafe-eval. ' +
+              'The template compiler cannot work in this environment. Consider ' +
+              'relaxing the policy to allow unsafe-eval or pre-compiling your ' +
+              'templates into render functions.'
           );
         }
       }
@@ -65,8 +64,8 @@ export function createCompileToFunctionFn(
         } else {
           warn(
             `Error compiling template:\n\n${template}\n\n` +
-              compiled.errors.map((e) => `- ${e}`).join("\n") +
-              "\n",
+              compiled.errors.map((e) => `- ${e}`).join('\n') +
+              '\n',
             vm
           );
         }
@@ -94,7 +93,7 @@ export function createCompileToFunctionFn(
               .map(
                 ({ err, code }) => `${(err as any).toString()} in\n\n${code}\n`
               )
-              .join("\n"),
+              .join('\n'),
           vm
         );
       }

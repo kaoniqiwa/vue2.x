@@ -1,8 +1,7 @@
-import { observe } from "core/observer";
-import Dep from "core/observer/dep";
-import Watcher, { WatcherOptions } from "core/observer/watcher";
-import { isReserved, isServerRendering, nativeWatch, warn } from "core/util";
-import { watch } from "fs";
+import { observe } from 'core/observer';
+import Dep from 'core/observer/dep';
+import Watcher, { WatcherOptions } from 'core/observer/watcher';
+import { isReserved, isServerRendering, nativeWatch, warn } from 'core/util';
 import {
   __DEV__,
   hasOwn,
@@ -10,12 +9,12 @@ import {
   isFunction,
   isPlainObject,
   noop,
-} from "src/shared/util";
-import { Component, FuncType, ObjectType } from "src/types/component";
-import { ComponentOptions } from "src/types/options";
+} from 'src/shared/util';
+import { Component, ObjectType } from 'src/types/component';
+import { ComponentOptions } from 'src/types/options';
 
 export function stateMixin(Vue: typeof Component) {
-  const dataDef: Pick<PropertyDescriptor, "get" | "set"> = {
+  const dataDef: Pick<PropertyDescriptor, 'get' | 'set'> = {
     get(this: Component) {
       return this._data;
     },
@@ -23,15 +22,15 @@ export function stateMixin(Vue: typeof Component) {
   if (__DEV__) {
     dataDef.set = function (this: Component) {
       warn(
-        "Avoid replacing instance root $data. " +
-          "Use nested data properties instead.",
+        'Avoid replacing instance root $data. ' +
+          'Use nested data properties instead.',
         this
       );
     };
   }
 
   /** 访问 $data 就是访问 _data, _data 已经经过响应式处理 */
-  Object.defineProperty(Vue.prototype, "$data", dataDef);
+  Object.defineProperty(Vue.prototype, '$data', dataDef);
 
   Vue.prototype.$watch = function (
     expOrFn: string | (() => any),
@@ -99,8 +98,8 @@ function initData(vm: Component) {
     data = {};
     __DEV__ &&
       warn(
-        "data functions should return an  object:\n" +
-          "https://vuejs.org/v2/guide/components.html#data-Must-Be-a-Function",
+        'data functions should return an  object:\n' +
+          'https://vuejs.org/v2/guide/components.html#data-Must-Be-a-Function',
         vm
       );
   }
@@ -130,7 +129,7 @@ function initData(vm: Component) {
      * }
      */
     if (!isReserved(key)) {
-      proxy(vm, "_data", key);
+      proxy(vm, '_data', key);
     }
   });
   /** 劫持数据 */
@@ -141,7 +140,7 @@ function initMethods(vm: Component, methods: Record<string, Function>) {
   let props = vm.$options.props;
   for (let key in methods) {
     if (__DEV__) {
-      if (typeof methods[key] !== "function") {
+      if (typeof methods[key] !== 'function') {
         warn(
           `Method "${key}" has type "${typeof methods[
             key
@@ -160,7 +159,7 @@ function initMethods(vm: Component, methods: Record<string, Function>) {
         );
       }
     }
-    vm[key] = typeof methods[key] !== "function" ? noop : methods[key].bind(vm);
+    vm[key] = typeof methods[key] !== 'function' ? noop : methods[key].bind(vm);
   }
 }
 
@@ -224,7 +223,7 @@ function getData(data: Function, vm: Component): object {
   try {
     return data.call(vm, vm);
   } catch (e: any) {
-    console.error("[Vue warn]" + e);
+    console.error('[Vue warn]' + e);
     return {};
   }
 }
@@ -246,7 +245,7 @@ function proxy(target: Object, sourceKey: string, key: string) {
 function defineComputed(
   target: Component,
   key: string,
-  userDef: Exclude<ComponentOptions["computed"], undefined>["key"]
+  userDef: Exclude<ComponentOptions['computed'], undefined>['key']
 ) {
   const shouldCache = !isServerRendering(); // true
   const sharedPropertyDefinition = {

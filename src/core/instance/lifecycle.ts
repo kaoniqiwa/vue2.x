@@ -1,10 +1,10 @@
-import Watcher, { WatcherOptions } from "core/observer/watcher";
-import { warn } from "core/util";
-import { invokeWithErrorHandling } from "core/util/error";
-import { createEmptyVNode } from "core/vdom/create-empty";
-import VNode from "core/vdom/vnode";
-import { __DEV__, noop } from "src/shared/util";
-import { Component } from "src/types/component";
+import Watcher, { WatcherOptions } from 'core/observer/watcher';
+import { warn } from 'core/util';
+import { invokeWithErrorHandling } from 'core/util/error';
+import { createEmptyVNode } from 'core/vdom/create-empty';
+import VNode from 'core/vdom/vnode';
+import { __DEV__, noop } from 'src/shared/util';
+import { Component } from 'src/types/component';
 
 export let activeInstance: any = null;
 
@@ -19,7 +19,7 @@ export function lifecycleMixin(Vue: typeof Component) {
   /**将虚拟DOM，生成真实DOM */
   Vue.prototype._update = function (vnode: VNode) {
     const vm = this;
-    const prevEl = vm.$el;
+    // const prevEl = vm.$el;
     const prevVnode = vm._vnode;
     vm._vnode = vnode;
     const restoreActiveInstance = setActiveInstance(vm);
@@ -59,7 +59,7 @@ export function mountComponent(vm: Component, el?: Element) {
     if (__DEV__) {
       if (
         (vm.$options.template &&
-          String(vm.$options.template).charAt(0) != "#") ||
+          String(vm.$options.template).charAt(0) != '#') ||
         vm.$options.el ||
         el
       ) {
@@ -69,9 +69,9 @@ export function mountComponent(vm: Component, el?: Element) {
          *  2. new Vue({el:"#app"}).$mount('')
          */
         warn(
-          "You are using the runtime-only build of Vue where the template " +
-            "compiler is not available. Either pre-compile the templates into " +
-            "render functions, or use the compiler-included build.",
+          'You are using the runtime-only build of Vue where the template ' +
+            'compiler is not available. Either pre-compile the templates into ' +
+            'render functions, or use the compiler-included build.',
           vm
         );
       } else {
@@ -80,13 +80,13 @@ export function mountComponent(vm: Component, el?: Element) {
          * new Vue({}).$mount('')
          */
         warn(
-          "Failed to mount component: template or render function not defined.",
+          'Failed to mount component: template or render function not defined.',
           vm
         );
       }
     }
   }
-  callHook(vm, "beforeMount");
+  callHook(vm, 'beforeMount');
 
   const updateComponent = () => {
     vm._update(vm._render());
@@ -96,7 +96,7 @@ export function mountComponent(vm: Component, el?: Element) {
     /** 每次更新前调用 before() */
     before() {
       if (vm._isMounted && !vm._isDestroyed) {
-        callHook(vm, "beforeUpdate");
+        callHook(vm, 'beforeUpdate');
       }
     },
   };
@@ -110,7 +110,7 @@ export function mountComponent(vm: Component, el?: Element) {
   new Watcher(vm, updateComponent, noop, watcherOptions, true);
 
   /**挂载完成后，vm.$el 更新为最新元素 */
-  callHook(vm, "mounted");
+  callHook(vm, 'mounted');
   vm._isMounted = true;
 
   return vm;

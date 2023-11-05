@@ -1,4 +1,4 @@
-import { pluckModuleFunction } from "compiler/helpers";
+import { pluckModuleFunction } from 'compiler/helpers';
 import {
   ASTAttr,
   ASTElement,
@@ -9,14 +9,13 @@ import {
   CodegenResult,
   CompilerOptions,
   DataGenFunction,
-  TransformFunction,
-} from "src/types/compiler";
+} from 'src/types/compiler';
 
 function genElement(el: ASTElement, state: CodegenState) {
   if (el.if && !el.ifProcessed) {
     return genIf(el, state);
-  } else if (el.tag == "template") {
-    return genChildren(el, state) || "void 0";
+  } else if (el.tag == 'template') {
+    return genChildren(el, state) || 'void 0';
   } else {
     let data;
     /** el.plain 为 true 表示元素上没有添加任何属性，不需要 genData
@@ -32,8 +31,8 @@ function genElement(el: ASTElement, state: CodegenState) {
       tag = `'${el.tag}'`;
     }
     const children = genChildren(el, state);
-    const code = `_c(${tag}${data ? `,${data}` : ""}${
-      children ? `,${children}` : ""
+    const code = `_c(${tag}${data ? `,${data}` : ''}${
+      children ? `,${children}` : ''
     })`;
 
     return code;
@@ -44,20 +43,20 @@ function genElement(el: ASTElement, state: CodegenState) {
 function genChildren(el: ASTElement, state: CodegenState) {
   let children = el.children;
   if (children.length) {
-    const le = children[0];
+    // const le = children[0];
     if (children.length == 1) {
     }
     const normalizationType = 0;
     const gen = genNode;
 
-    return `[${children.map((c) => gen(c, state)).join(",")}]${
-      normalizationType ? `,${normalizationType}` : ""
+    return `[${children.map((c) => gen(c, state)).join(',')}]${
+      normalizationType ? `,${normalizationType}` : ''
     }`;
   }
 }
 /**创建数据 */
 function genData(el: ASTElement, state: CodegenState): string {
-  let data = "{";
+  let data = '{';
 
   // key
   if (el.key) {
@@ -76,7 +75,7 @@ function genData(el: ASTElement, state: CodegenState): string {
     data += `attrs:${genProps(el.attrs)},`;
   }
   /** '{staticClass:"foo",staticStyle:{"color":"red","font-size":"20px"},attrs:{"id":"app"}}'  */
-  data = data.replace(/,$/, "") + "}";
+  data = data.replace(/,$/, '') + '}';
   if (el.dynamicAttrs) {
     data = `_b(${data},"${el.tag}",${genProps(el.dynamicAttrs)})`;
   }
@@ -99,7 +98,7 @@ function genProps(props: Array<ASTAttr>) {
       staticProps += `"${prop.name}":${value},`;
     }
   }
-  staticProps = `{${staticProps.replace(/,$/, "")}}`;
+  staticProps = `{${staticProps.replace(/,$/, '')}}`;
   if (dynamicProps) {
     return `_d(${staticProps},[${dynamicProps.slice(0, -1)}])`;
   } else {
@@ -128,14 +127,14 @@ function genProps(props: Array<ASTAttr>) {
  *
  */
 function transformSpecialNewlines(text: string) {
-  return text.replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029");
+  return text.replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
 }
 
 function genNode(node: ASTNode, state: CodegenState): string {
   if (node.type == Node.ELEMENT_NODE) {
     return genElement(node, state);
   } else if (node.type == Node.TEXT_NODE && node.isComment) {
-    return "";
+    return '';
   } else {
     return genText(node);
   }
@@ -150,7 +149,7 @@ function genIfConditions(
   state: CodegenState
 ): string {
   if (!conditions.length) {
-    return "_e()";
+    return '_e()';
   }
   const condition = conditions.shift()!;
   if (condition.exp) {
@@ -177,8 +176,8 @@ export function generate(
 ): CodegenResult {
   const state = new CodegenState(options);
   const code = ast
-    ? ast.tag === "script"
-      ? "null"
+    ? ast.tag === 'script'
+      ? 'null'
       : genElement(ast, state)
     : '_c("div")'; // 纯文本的情况
 
@@ -203,6 +202,6 @@ class CodegenState {
   constructor(options: CompilerOptions) {
     this.options = options;
     this.staticRenderFns = [];
-    this.dataGenFns = pluckModuleFunction(options.modules, "genData");
+    this.dataGenFns = pluckModuleFunction(options.modules, 'genData');
   }
 }

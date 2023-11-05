@@ -1,7 +1,7 @@
-import { ASSET_TYPES, LIFECYCLE_HOOKS } from "src/shared/constants";
-import config from "../config";
-import { Component, ObjectType } from "src/types/component";
-import { set } from "core/observer";
+import { ASSET_TYPES, LIFECYCLE_HOOKS } from 'src/shared/constants';
+import config from '../config';
+import { Component, ObjectType } from 'src/types/component';
+import { set } from 'core/observer';
 import {
   __DEV__,
   camelize,
@@ -13,11 +13,10 @@ import {
   isFunction,
   isPlainObject,
   toRawType,
-} from "shared/util";
-import { hasSymbol, unicodeRegExp, warn } from ".";
-import { GlobalAPI } from "src/types/global-api";
-import { isReservedTag } from "web/util";
-import { ComponentOptions } from "src/types/options";
+} from 'shared/util';
+import { hasSymbol, unicodeRegExp, warn } from '.';
+import { GlobalAPI } from 'src/types/global-api';
+import { ComponentOptions } from 'src/types/options';
 const defaultStrat = function (parentVal: any, childVal: any): any {
   return childVal === undefined ? parentVal : childVal;
 };
@@ -31,7 +30,7 @@ if (__DEV__) {
        */
       warn(
         `option "${key}" can only be used during instance ` +
-          "creation with the `new` keyword."
+          'creation with the `new` keyword.'
       );
     }
     return defaultStrat(parent, child);
@@ -66,7 +65,7 @@ function mergeLifecycleHook(
     : parentVal;
 }
 
-ASSET_TYPES.forEach((type) => (strats[type + "s"] = mergeAssets));
+ASSET_TYPES.forEach((type) => (strats[type + 's'] = mergeAssets));
 
 /** assets 使用原型链合并 */
 function mergeAssets(
@@ -101,8 +100,8 @@ strats.data = function (parentVal: any, childVal: any, vm?: Component) {
          */
         warn(
           'The "data" option should be a function ' +
-            "that returns a per-instance value in component " +
-            "definitions.",
+            'that returns a per-instance value in component ' +
+            'definitions.',
           vm
         );
       }
@@ -263,7 +262,7 @@ export function validateComponentName(name: string) {
       'Invalid component name: "' +
         name +
         '". Component names ' +
-        "should conform to valid custom element name in html5 specification."
+        'should conform to valid custom element name in html5 specification.'
     );
   }
   /**
@@ -272,8 +271,8 @@ export function validateComponentName(name: string) {
    */
   if (isBuiltInTag(name) || config.isReservedTag(name)) {
     warn(
-      "Do not use built-in or reserved HTML elements as component " +
-        "id: " +
+      'Do not use built-in or reserved HTML elements as component ' +
+        'id: ' +
         name
     );
   }
@@ -293,7 +292,7 @@ export function mergeOptions(
    * 子类 options 会和父类 options 合并
    *
    */
-  if (isFunction(child) && Reflect.has(child, "cid")) {
+  if (isFunction(child) && Reflect.has(child, 'cid')) {
     child = (child as unknown as GlobalAPI).options;
   }
 
@@ -328,11 +327,11 @@ export function mergeOptions(
  */
 export function resolveAsset(
   options: ComponentOptions,
-  type: "components",
+  type: 'components',
   id: string,
   warnMissing?: boolean
 ) {
-  if (typeof id !== "string") return;
+  if (typeof id !== 'string') return;
   const assets = options[type];
 
   if (assets) {
@@ -356,7 +355,7 @@ export function resolveAsset(
 
     if (__DEV__ && warnMissing && !res) {
       /** 未找到资源 */
-      warn("Failed to resolve " + type.slice(0, -1) + ": " + id);
+      warn('Failed to resolve ' + type.slice(0, -1) + ': ' + id);
     }
     return res;
   }
