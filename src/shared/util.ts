@@ -1,7 +1,7 @@
-import { ModuleOptions } from "src/types/compiler";
-import { ObjectType } from "src/types/component";
+import { ModuleOptions } from 'src/types/compiler';
+import { ObjectType } from 'src/types/component';
 
-export const __DEV__ = process.env.NODE_ENV != "production";
+export const __DEV__ = process.env.NODE_ENV != 'production';
 export function noop(...res: any[]) {}
 export const no = (...res: any[]) => false;
 export const isArray = Array.isArray;
@@ -13,7 +13,7 @@ export function genStaticKeys(modules: Array<ModuleOptions>) {
     .reduce((keys: string[], module: ModuleOptions) => {
       return keys.concat(module.staticKeys || []);
     }, [])
-    .join(",");
+    .join(',');
 }
 export function toString(val: any) {
   /**
@@ -22,25 +22,25 @@ export function toString(val: any) {
    * 从而实现有关对象的依赖收集
    */
   return val == null
-    ? ""
+    ? ''
     : isArray(val) || (isPlainObject(val) && val.toString === _toString)
     ? JSON.stringify(val, null, 2)
     : String(val);
 }
 export function isFunction(value: any): value is Function {
-  return typeof value === "function";
+  return typeof value === 'function';
 }
 
 export function isObject(o: any): boolean {
-  return o !== null && (typeof o === "function" || typeof o === "object");
+  return o !== null && (typeof o === 'function' || typeof o === 'object');
 }
 
 export function isPlainObject(o: any): o is ObjectType {
   return (
     isObject(o) &&
-    Object.prototype.toString.call(o) === "[object Object]" &&
+    Object.prototype.toString.call(o) === '[object Object]' &&
     /** 对象是 Object 实例而不是自定义类实例 */
-    (typeof o.constructor !== "function" || o.constructor.name === "Object")
+    (typeof o.constructor !== 'function' || o.constructor.name === 'Object')
   );
 }
 
@@ -76,7 +76,7 @@ export function extend(
 export function makeMap(str: string, expectsLowerCase?: boolean) {
   const map: Record<string, boolean> = Object.create(null);
 
-  const list = str.split(",");
+  const list = str.split(',');
   list.forEach((key) => (map[key] = true));
 
   return expectsLowerCase
@@ -91,10 +91,10 @@ export function makeMap(str: string, expectsLowerCase?: boolean) {
  */
 export function isPrimitive(value: any): boolean {
   return (
-    typeof value === "string" ||
-    typeof value === "number" ||
-    typeof value === "boolean" ||
-    typeof value === "symbol"
+    typeof value === 'string' ||
+    typeof value === 'number' ||
+    typeof value === 'boolean' ||
+    typeof value === 'symbol'
   );
 }
 
@@ -125,7 +125,7 @@ export function toRawType(value: any) {
   return _toString.call(value).slice(8, -1);
 }
 /** Vue 内部组件名,自定义组件不得使用 */
-export const isBuiltInTag = makeMap("slot,component", true);
+export const isBuiltInTag = makeMap('slot,component', true);
 
 /**
  * hello-world => helloWorld
@@ -133,7 +133,7 @@ export const isBuiltInTag = makeMap("slot,component", true);
  */
 const camelizeRE = /-(\w)/g;
 export const camelize = cached((str: string) => {
-  return str.replace(camelizeRE, (_, c) => (c ? c.toUpperCase() : ""));
+  return str.replace(camelizeRE, (_, c) => (c ? c.toUpperCase() : ''));
 });
 
 /**
@@ -151,7 +151,7 @@ const hyphenateRE = /\B([A-Z])/g;
  *  helloWorld => hello-World => hello-world
  */
 export const hyphenate = cached((str: string) => {
-  return str.replace(hyphenateRE, "-$1").toLowerCase();
+  return str.replace(hyphenateRE, '-$1').toLowerCase();
 });
 
 export function toObject(arr: Array<any>) {
@@ -162,4 +162,4 @@ export function toObject(arr: Array<any>) {
   return res;
 }
 /** Vue 属性 */
-export const isReservedAttribute = makeMap("key,ref,slot,slot-scope,is");
+export const isReservedAttribute = makeMap('key,ref,slot,slot-scope,is');

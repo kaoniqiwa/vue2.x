@@ -1,10 +1,9 @@
-import VNode from "core/vdom/vnode";
-import { ComponentOptions } from "./options";
-import { VNodeChildren, VNodeData } from "./vnode";
-import Watcher from "core/observer/watcher";
-import { Config } from "core/config";
-import { GlobalAPI } from "./global-api";
-import { ToFunctionResult } from "./compiler";
+import VNode from 'core/vdom/vnode';
+import { ComponentOptions } from './options';
+import { VNodeChildren, VNodeData } from './vnode';
+import Watcher from 'core/observer/watcher';
+import { Config } from 'core/config';
+import { ToFunctionResult } from './compiler';
 
 export declare class Component {
   constructor(options?: ComponentOptions);
@@ -12,7 +11,6 @@ export declare class Component {
   static cid: number;
   static super: typeof Component;
   static config: Config;
-  static extend: GlobalAPI["extend"];
   static options: Record<string, any>;
   static compile: (template: string) => ToFunctionResult;
 

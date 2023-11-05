@@ -4,24 +4,24 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <script src="http://localhost/Project/Vue2.x/dist/rollup/vue.js"></script> -->
-    <script src="http://localhost/Project/Vue2.x/dist/webpack/vue.js"></script>
+    <script src="http://localhost/Project/Vue2.x/dist/rollup/vue.js"></script>
+    <!-- <script src="http://localhost/Project/Vue2.x/dist/webpack/vue.js"></script> -->
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">hello</div>
 
     <script>
       const vm = new Vue({
-        el: "#app",
-        data: {
-          firstName: "Jim",
-          lastName: "Green",
-        },
-        created() {
-          this.$nextTick().then((res) => {
-            console.log("sds", res);
-          });
-        },
+        el: '#app',
+        // data: {
+        //   firstName: 'Jim',
+        //   lastName: 'Green',
+        // },
+        // created() {
+        //   this.$nextTick().then((res) => {
+        //     console.log('sds', res);
+        //   });
+        // },
       });
     </script>
   </body>

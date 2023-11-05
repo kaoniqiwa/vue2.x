@@ -1,15 +1,15 @@
-import { GlobalAPI } from "src/types/global-api";
-import { initMixin } from "./mixin";
-import { mergeOptions, nextTick, warn } from "core/util";
-import { ASSET_TYPES } from "src/shared/constants";
-import { initAssetRegisters } from "./assets";
-import { initUse } from "./use";
-import { initExtend } from "./extend";
-import config from "core/config";
-import { __DEV__, extend } from "shared/util";
-import { Component } from "src/types/component";
-import { defineReactive } from "core/observer";
-import builtInComponents from "../components/index";
+import { GlobalAPI } from 'src/types/global-api';
+import { initMixin } from './mixin';
+import { mergeOptions, nextTick, warn } from 'core/util';
+import { ASSET_TYPES } from 'src/shared/constants';
+import { initAssetRegisters } from './assets';
+import { initUse } from './use';
+import { initExtend } from './extend';
+import config from 'core/config';
+import { __DEV__, extend } from 'shared/util';
+import { Component } from 'src/types/component';
+import { defineReactive } from 'core/observer';
+import builtInComponents from '../components/index';
 
 export function initGlobalAPI(Vue: GlobalAPI) {
   const configDef: Record<string, any> = {};
@@ -17,12 +17,12 @@ export function initGlobalAPI(Vue: GlobalAPI) {
   if (__DEV__) {
     configDef.set = () => {
       warn(
-        "Do not replace the Vue.config object, set individual fields instead."
+        'Do not replace the Vue.config object, set individual fields instead.'
       );
     };
   }
   /**Vue 全局配置 */
-  Object.defineProperty(Vue, "config", configDef);
+  Object.defineProperty(Vue, 'config', configDef);
 
   Vue.util = {
     warn,
@@ -39,12 +39,11 @@ export function initGlobalAPI(Vue: GlobalAPI) {
    *
    */
   ASSET_TYPES.forEach((type) => {
-    Vue.options[type + "s"] = Object.create(null);
+    Vue.options[type + 's'] = Object.create(null);
   });
 
   /** _base 会被合并到所有 instance.$options 中 */
-  Vue.options._base = Vue as unknown as typeof Component;
-
+  Vue.options._base = Vue;
   Vue.nextTick = nextTick;
 
   extend(Vue.options.components!, builtInComponents);

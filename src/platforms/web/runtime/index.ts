@@ -1,12 +1,12 @@
-import _Vue from "core/index";
-import { isReservedTag, mustUseProp, query } from "../util";
-import { inBrowser } from "core/util";
-import { mountComponent } from "core/instance/lifecycle";
-import { Component } from "src/types/component";
-import { patch } from "./patch";
-import { extend, noop } from "src/shared/util";
-import platformDirectives from "./directives";
-import platformComponents from "./components";
+import _Vue from 'core/index';
+import { isReservedTag, mustUseProp, query } from '../util';
+import { inBrowser } from 'core/util';
+import { mountComponent } from 'core/instance/lifecycle';
+import { Component } from 'src/types/component';
+import { patch } from './patch';
+import { extend, noop } from 'src/shared/util';
+import platformDirectives from './directives';
+import platformComponents from './components';
 
 const Vue: typeof Component = _Vue as unknown as typeof Component;
 
@@ -25,4 +25,5 @@ Vue.prototype.$mount = function (el?: string | Element) {
   el = el && inBrowser ? query(el) : undefined;
   return mountComponent(this, el);
 };
+
 export default Vue;

@@ -1,11 +1,11 @@
-import { Component } from "src/types/component";
-import { ComponentOptions, InternalComponentOptions } from "src/types/options";
-import { initState } from "./state";
-import { initRender } from "./render";
-import { mergeOptions } from "core/util";
-import { GlobalAPI } from "src/types/global-api";
-import { callHook, initLifecycle } from "./lifecycle";
-import { initEvents } from "./events";
+import { Component } from 'src/types/component';
+import { ComponentOptions, InternalComponentOptions } from 'src/types/options';
+import { initState } from './state';
+import { initRender } from './render';
+import { mergeOptions } from 'core/util';
+import { GlobalAPI } from 'src/types/global-api';
+import { callHook, initLifecycle } from './lifecycle';
+import { initEvents } from './events';
 
 /** uid: vue 实例 唯一ID  */
 let uid = 0;
@@ -46,13 +46,13 @@ export function initMixin(Vue: typeof Component) {
     initRender(vm);
 
     /**初始化之前，数据还未代理到 vm 实例上 */
-    callHook(vm, "beforeCreate");
+    callHook(vm, 'beforeCreate');
 
     /** 初始化状态，处理 options 选项 */
     initState(vm);
 
     /**数据处理完成，数据已经代理到 vm 实例上 */
-    callHook(vm, "created");
+    callHook(vm, 'created');
 
     /** 自动挂载元素 */
     if (vm.$options.el) {
